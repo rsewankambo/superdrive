@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+	<title>Page Not Found</title>
+</head>
+<body>
+	<div class="alert alert-danger fill-parent" style="text-align: center">
+		<h1 class="display-5">404</h1>
+		<div>Oops!<br>&#128585;<br>PAGE NOT FOUND!</div>
+		<br>
+		<div>Click <a th:href="@{/home}">here</a> to continue.</div>
+	</div>
+</body>
+</html>
