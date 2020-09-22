@@ -42,6 +42,14 @@
                 <h1 class="display-5">Error</h1>
                 <span>Maximum file size (2MB) exceeded. Try <a th:href="@{/home}">again</a>.</span>
             </div>
+            <div class="alert alert-danger fill-parent" th:if="${emptyTitle}">
+                <h1 class="display-5">Error</h1>
+                <span>Note not saved. Title required. Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div class="alert alert-danger fill-parent" th:if="${emptyDescription}">
+                <h1 class="display-5">Error</h1>
+                <span>Note not saved. Description is required. Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
             <div class="alert alert-danger fill-parent" th:if="${IOError}">
                 <h1 class="display-5">Error</h1>
                 <span>Something went wrong while uploading the file. Try <a th:href="@{/home}">again</a>.</span>

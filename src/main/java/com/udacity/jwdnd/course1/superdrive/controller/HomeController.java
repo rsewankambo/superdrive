@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.superdrive.controller;
 
+import com.udacity.jwdnd.course1.superdrive.model.Note;
 import com.udacity.jwdnd.course1.superdrive.model.User;
 import com.udacity.jwdnd.course1.superdrive.service.CredentialService;
 import com.udacity.jwdnd.course1.superdrive.service.FileService;
@@ -32,11 +33,11 @@ public class HomeController {
     }
     
     @GetMapping
-    public String homeView(Authentication authentication, Model model) {
+    public String homeView(Note noteForm, Authentication authentication, Model model) {
         user = userService.getUser(authentication.getName());
         userId = user.getUserId();
         model.addAttribute("userFiles", fileService.retrieveAll(userId));
-//        model.addAttribute("userNotes", noteService.retrieveAll());
+        model.addAttribute("userNotes", noteService.retrieveAll(userId));
 //        model.addAttribute("userCredentials", credentialService.retrieveAll());
         return "home";
     }
