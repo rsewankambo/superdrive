@@ -1,11 +1,9 @@
 package com.udacity.jwdnd.course1.superdrive.controller;
 
+import com.udacity.jwdnd.course1.superdrive.model.Credential;
 import com.udacity.jwdnd.course1.superdrive.model.Note;
 import com.udacity.jwdnd.course1.superdrive.model.User;
-import com.udacity.jwdnd.course1.superdrive.service.CredentialService;
-import com.udacity.jwdnd.course1.superdrive.service.FileService;
-import com.udacity.jwdnd.course1.superdrive.service.NoteService;
-import com.udacity.jwdnd.course1.superdrive.service.UserService;
+import com.udacity.jwdnd.course1.superdrive.service.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,26 +17,30 @@ public class HomeController {
     private NoteService noteService;
     private CredentialService credentialService;
     private UserService userService;
+    private EncryptionService encryptionService;
     private User user;
     private int userId;
     
     public HomeController(FileService fileService,
                           NoteService noteService,
                           CredentialService credentialService,
-                          UserService userService) {
+                          UserService userService,
+                          EncryptionService encryptionService) {
         this.fileService = fileService;
         this.noteService = noteService;
         this.credentialService = credentialService;
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
     
     @GetMapping
-    public String homeView(Note noteForm, Authentication authentication, Model model) {
+    public String homeView(Note noteForm, Credential credentialForm, Authentication authentication, Model model) {
         user = userService.getUser(authentication.getName());
         userId = user.getUserId();
         model.addAttribute("userFiles", fileService.retrieveAll(userId));
         model.addAttribute("userNotes", noteService.retrieveAll(userId));
-//        model.addAttribute("userCredentials", credentialService.retrieveAll());
+        model.addAttribute("userCredentials", credentialService.retrieveAll(userId));
+        model.addAttribute("encryptionService", encryptionService);
         return "home";
     }
     
