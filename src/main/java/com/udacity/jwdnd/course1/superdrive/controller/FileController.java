@@ -44,7 +44,7 @@ public class FileController {
                 if (fileId < 1) model.addAttribute("IOError", true);
                 else {
                     if (!model.containsAttribute("updateSuccess")) {
-                        model.addAttribute("uploadSuccess", true);
+                        model.addAttribute("createSuccess", true);
                     }
                     model.addAttribute("uploadType", "file");
                 }

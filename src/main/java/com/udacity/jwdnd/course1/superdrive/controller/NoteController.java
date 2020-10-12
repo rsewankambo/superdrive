@@ -22,11 +22,13 @@ public class NoteController {
     @PostMapping("/note")
     public String saveUserNote(Note noteForm, Authentication auth, Model model) {
         int rows = 0;
+        boolean newNote = false;
         if (noteForm.getNoteTitle().isBlank() && noteForm.getNoteDescription().isBlank()) {
             model.addAttribute("emptyNote", true);
         } else {
             if (noteForm.getNoteId() == null) {
                 rows = noteService.create(noteForm, auth);
+                newNote = true;
             }
             else {
                 if (isValidRequest(noteForm, auth)) {
@@ -38,6 +40,7 @@ public class NoteController {
             }
             if (!model.containsAttribute("invalid")) {
                 if (rows < 1) model.addAttribute("IOError", true);
+                else if (newNote) model.addAttribute("createSuccess", true);
                 else model.addAttribute("updateSuccess", true);
             }
         }

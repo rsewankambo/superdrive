@@ -22,11 +22,13 @@ public class CredentialController {
     @PostMapping("/credential")
     public String saveUserCredential(Credential credentialForm, Authentication auth, Model model) {
         int rows = 0;
+        boolean newCredential = false;
         if (credentialForm.getUrl().isBlank() && credentialForm.getUsername().isBlank() && credentialForm.getUsername().isBlank()) {
             model.addAttribute("emptyCredential", true);
         } else {
             if (credentialForm.getCredentialId() == null) {
                 rows = credentialService.create(credentialForm, auth);
+                newCredential = true;
             }
             else {
                 if (isValidRequest(credentialForm, auth)) {
@@ -38,6 +40,7 @@ public class CredentialController {
             }
             if (!model.containsAttribute("invalid")) {
                 if (rows < 1) model.addAttribute("IOError", true);
+                else if (newCredential) model.addAttribute("createSuccess", true);
                 else model.addAttribute("updateSuccess", true);
             }
         }
