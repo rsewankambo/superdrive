@@ -15,7 +15,6 @@ public class ResultPage {
     @FindBy(className = "continue")
     private WebElement continueLink;
     
-    
     WebDriverWait wait;
     
     public ResultPage(WebDriver driver) {

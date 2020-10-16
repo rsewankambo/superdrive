@@ -18,8 +18,6 @@ public class HomeController {
     private CredentialService credentialService;
     private UserService userService;
     private EncryptionService encryptionService;
-    private User user;
-    private int userId;
     
     public HomeController(FileService fileService,
                           NoteService noteService,
@@ -35,8 +33,8 @@ public class HomeController {
     
     @GetMapping
     public String homeView(Note noteForm, Credential credentialForm, Authentication authentication, Model model) {
-        user = userService.getUser(authentication.getName());
-        userId = user.getUserId();
+        User user = userService.getUser(authentication.getName());
+        int userId = user.getUserId();
         model.addAttribute("userFiles", fileService.retrieveAll(userId));
         model.addAttribute("userNotes", noteService.retrieveAll(userId));
         model.addAttribute("userCredentials", credentialService.retrieveAll(userId));

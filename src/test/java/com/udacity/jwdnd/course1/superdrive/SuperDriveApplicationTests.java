@@ -10,8 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SuperDriveApplicationTests {
@@ -57,11 +56,11 @@ class SuperDriveApplicationTests {
 		driver.get(baseURL + "/signup");
 		SignupPage signupPage = new SignupPage(driver);
 		LoginPage loginPage = new LoginPage(driver);
-		signupPage.signupUser("first1", "last1", "user10", "password1");
+		signupPage.signupUser("first1", "last1", "user", "password1");
 		assertEquals("You successfully signed up!", loginPage.getAlertText());
 
 		Thread.sleep(1000);
-		loginPage.loginUser("user10", "password1");
+		loginPage.loginUser("user", "password1");
 		Thread.sleep(1000);
 		assertEquals("Home", driver.getTitle());
 
@@ -82,19 +81,19 @@ class SuperDriveApplicationTests {
 		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		homePage.selectNotesTab();
-		homePage.newNoteButton();
-		homePage.addNote(driver, "test create title", "test create description");
+		homePage.newNoteButtonClick();
+		homePage.addNote("test new title", "test new description");
 		
 		ResultPage resultPage = new ResultPage(driver);
-		assertEquals(true, resultPage.getResultMessage().contains("Your note was successfully saved"));
+		assertTrue(resultPage.getResultMessage().contains("Your note was successfully saved"));
 		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
 		String lastNoteTitle = homePage.getLastNoteTitle();
-		assertEquals("test create title", lastNoteTitle);
+		assertEquals("test new title", lastNoteTitle);
 		String lastNoteDescription = homePage.getLastNoteDescription();
-		assertEquals("test create description", lastNoteDescription);
+		assertEquals("test new description", lastNoteDescription);
 	}
 	
 	@Test
@@ -106,22 +105,21 @@ class SuperDriveApplicationTests {
 		HomePage homePage = new HomePage(driver);
 		ResultPage resultPage = new ResultPage(driver);
 		
-		populateNotes(homePage, resultPage, "test title 1", "test edit description 1");
+		populateNotes(homePage, resultPage, "test title 1", "test description 1");
 		Thread.sleep(1000);
-		populateNotes(homePage, resultPage, "test title 2", "test edit description 2");
+		populateNotes(homePage, resultPage, "test title 2", "test description 2");
 		
 		homePage.logout();
 		loginHelper();
 		Thread.sleep(1000);
 		
 		// note title edit test
-		Thread.sleep(1000);
 		String titleBeforeUpdate = homePage.getLastNoteTitle();
 		String titleAfterUpdate = "test title 2 update";
 		homePage.lastNoteEditButtonClick();
-		homePage.addNote(driver, titleAfterUpdate, null);
+		homePage.addNote(titleAfterUpdate, null);
 		
-		assertEquals(true, resultPage.getResultMessage().contains("Your note was updated"));
+		assertTrue(resultPage.getResultMessage().contains("Your note was updated"));
 		Thread.sleep(1000);
 		resultPage.moveOn();
 		
@@ -132,18 +130,13 @@ class SuperDriveApplicationTests {
 		
 		// note description edit test
 		String descBeforeUpdate = homePage.getLastNoteDescription();
-		String descAfterUpdate = "test edit description 2 update";
+		String descAfterUpdate = "test description 2 update";
 		homePage.lastNoteEditButtonClick();
-		homePage.addNote(driver, null, descAfterUpdate);
+		homePage.addNote( null, descAfterUpdate);
 		
-		assertEquals(true, resultPage.getResultMessage().contains("Your note was updated"));
+		assertTrue(resultPage.getResultMessage().contains("Your note was updated"));
 		Thread.sleep(1000);
 		resultPage.moveOn();
-		
-		Thread.sleep(1000);
-		String currentDesc = homePage.getLastNoteDescription();
-		assertNotEquals(descBeforeUpdate, currentDesc);
-		assertEquals(descAfterUpdate, currentDesc);
 	}
 	
 	@Test
@@ -155,9 +148,9 @@ class SuperDriveApplicationTests {
 		HomePage homePage = new HomePage(driver);
 		ResultPage resultPage = new ResultPage(driver);
 		
-		populateNotes(homePage, resultPage, "test title 3", "test edit description 3");
+		populateNotes(homePage, resultPage, "test title 3", "test description 3");
 		Thread.sleep(1000);
-		populateNotes(homePage, resultPage, "test title 4", "test edit description 4");
+		populateNotes(homePage, resultPage, "test title 4", "test description 4");
 		
 		homePage.logout();
 		loginHelper();
@@ -166,7 +159,7 @@ class SuperDriveApplicationTests {
 		String lastNoteTitleBefore = homePage.getLastNoteTitle();
 		String lastNoteDescBefore = homePage.getLastNoteDescription();
 		homePage.lastNoteDeleteButtonClick();
-		assertEquals(true,resultPage.getResultMessage().contains("Your note was successfully deleted"));
+		assertTrue(resultPage.getResultMessage().contains("Your note was successfully deleted"));
 		Thread.sleep(1000);
 		resultPage.moveOn();
 		
@@ -175,6 +168,127 @@ class SuperDriveApplicationTests {
 		String lastNoteDescAfter = homePage.getLastNoteDescription();
 		assertNotEquals(lastNoteTitleBefore, lastNoteTitleAfter);
 		assertNotEquals(lastNoteDescBefore, lastNoteDescAfter);
+	}
+	
+	@Test
+	public void testCreateNewCredential() throws InterruptedException {
+		signupHelper();
+		loginHelper();
+		
+		Thread.sleep(1000);
+		HomePage homePage = new HomePage(driver);
+		homePage.selectCredentialsTab();
+		homePage.newCredentialButtonClick();
+		homePage.addCredential("test new url", "test new username", "test new password");
+		
+		ResultPage resultPage = new ResultPage(driver);
+		assertTrue(resultPage.getResultMessage().contains("Your credential was successfully saved"));
+		Thread.sleep(1000);
+		resultPage.moveOn();
+		
+		Thread.sleep(1000);
+		String lastCredentialUrl = homePage.getLastCredentialUrl();
+		assertEquals("test new url", lastCredentialUrl);
+		String lastCredentialUsername = homePage.getLastCredentialUsername();
+		assertEquals("test new username", lastCredentialUsername);
+		String lastCredentialPassword = homePage.getLastCredentialPassword();
+		assertNotEquals("test new password", lastCredentialPassword);
+	}
+	
+	@Test
+	public void testEditExistingCredential() throws InterruptedException {
+		signupHelper();
+		loginHelper();
+		
+		Thread.sleep(1000);
+		HomePage homePage = new HomePage(driver);
+		ResultPage resultPage = new ResultPage(driver);
+		
+		populateCredentials(homePage, resultPage, "www.testUrl1.com", "testUsername1", "testPassword1");
+		Thread.sleep(1000);
+		populateCredentials(homePage, resultPage, "www.testUrl2.com", "testUsername2", "testPassword2");
+		
+		homePage.logout();
+		loginHelper();
+		Thread.sleep(1000);
+		
+		// credential URL edit test
+		String urlBeforeUpdate = homePage.getLastCredentialUrl();
+		String urlAfterUpdate = "www.testUrl2Update.com";
+		homePage.lastCredentialEditButtonClick();
+		homePage.addCredential(urlAfterUpdate, null, null);
+		
+		assertTrue(resultPage.getResultMessage().contains("Your credential was updated"));
+		Thread.sleep(1000);
+		resultPage.moveOn();
+		
+		Thread.sleep(1000);
+		String currentUrl = homePage.getLastCredentialUrl();
+		assertNotEquals(urlBeforeUpdate, currentUrl);
+		assertEquals(urlAfterUpdate, currentUrl);
+		
+		// credential username edit test
+		String usernameBeforeUpdate = homePage.getLastCredentialUsername();
+		String usernameAfterUpdate = "testUsername2Update";
+		homePage.lastCredentialEditButtonClick();
+		homePage.addCredential(null, usernameAfterUpdate, null);
+		
+		assertTrue(resultPage.getResultMessage().contains("Your credential was updated"));
+		Thread.sleep(1000);
+		resultPage.moveOn();
+		
+		Thread.sleep(1000);
+		String currentUsername = homePage.getLastCredentialUsername();
+		assertNotEquals(usernameBeforeUpdate, currentUsername);
+		assertEquals(usernameAfterUpdate, currentUsername);
+		
+		// credential password edit test
+		String passwordBeforeUpdate = homePage.getLastCredentialPassword();
+		String passwordAfterUpdate = "testPassword2Update";
+		homePage.lastCredentialEditButtonClick();
+		homePage.addCredential(null, null, passwordAfterUpdate);
+		
+		assertTrue(resultPage.getResultMessage().contains("Your credential was updated"));
+		Thread.sleep(1000);
+		resultPage.moveOn();
+		
+		Thread.sleep(1000);
+		passwordAfterUpdate = homePage.getLastCredentialPassword();
+		assertNotEquals(passwordBeforeUpdate, passwordAfterUpdate);
+	}
+	
+	@Test
+	public void testDeleteExistingCredential() throws InterruptedException {
+		signupHelper();
+		loginHelper();
+		
+		Thread.sleep(1000);
+		HomePage homePage = new HomePage(driver);
+		ResultPage resultPage = new ResultPage(driver);
+		
+		populateCredentials(homePage, resultPage, "test url 3", "test username 3", "test password 3");
+		Thread.sleep(1000);
+		populateCredentials(homePage, resultPage, "test url 4", "test username 4", "test password 3");
+		
+		homePage.logout();
+		loginHelper();
+		Thread.sleep(1000);
+		
+		String lastCredUrlBefore = homePage.getLastCredentialUrl();
+		String lastCredUsernameBefore = homePage.getLastCredentialUsername();
+		String lastCredPasswordBefore = homePage.getLastCredentialUsername();
+		homePage.lastCredentialDeleteButtonClick();
+		assertTrue(resultPage.getResultMessage().contains("Your credential was successfully deleted"));
+		Thread.sleep(1000);
+		resultPage.moveOn();
+		
+		Thread.sleep(1000);
+		String lastCredUrlAfter = homePage.getLastCredentialUrl();
+		String lastCredUsernameAfter = homePage.getLastCredentialUsername();
+		String lastCredPasswordAfter = homePage.getLastCredentialUsername();
+		assertNotEquals(lastCredUrlBefore, lastCredUrlAfter);
+		assertNotEquals(lastCredUsernameBefore, lastCredUsernameAfter);
+		assertNotEquals(lastCredPasswordBefore, lastCredPasswordAfter);
 	}
 	
 	private void signupHelper() {
@@ -189,10 +303,18 @@ class SuperDriveApplicationTests {
 		loginPage.loginUser("user2", "password2");
 	}
 	
-	private void populateNotes(HomePage homePage, ResultPage resultPage, String noteTitle, String noteDescription) throws InterruptedException {
+	private void populateNotes(HomePage homePage, ResultPage resultPage, String title, String description) throws InterruptedException {
 		homePage.selectNotesTab();
-		homePage.newNoteButton();
-		homePage.addNote(driver, noteTitle, noteDescription);
+		homePage.newNoteButtonClick();
+		homePage.addNote(title, description);
+		Thread.sleep(1000);
+		resultPage.moveOn();
+	}
+	
+	private void populateCredentials(HomePage homePage, ResultPage resultPage, String url, String username, String password) throws InterruptedException {
+		homePage.selectCredentialsTab();
+		homePage.newCredentialButtonClick();
+		homePage.addCredential(url, username, password);
 		Thread.sleep(1000);
 		resultPage.moveOn();
 	}

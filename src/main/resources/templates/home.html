@@ -160,9 +160,9 @@
                                 </button>
                                 <a class="btn btn-danger" th:href="@{/cred-delete(cid=${credential.credentialId})}">Delete</a>
                             </td>
-                            <th th:text="${credential.url}" scope="row"></th>
-                            <td th:text="${credential.username}"></td>
-                            <td th:text="${credential.password}"></td>
+                            <th class="cred-url" th:text="${credential.url}" scope="row"></th>
+                            <td class="cred-un" th:text="${credential.username}"></td>
+                            <td class="cred-pwd" th:text="${credential.password}"></td>
                         </tr>
                         </tbody>
                     </table>
