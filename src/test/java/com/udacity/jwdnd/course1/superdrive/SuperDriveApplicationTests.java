@@ -56,11 +56,11 @@ class SuperDriveApplicationTests {
 		driver.get(baseURL + "/signup");
 		SignupPage signupPage = new SignupPage(driver);
 		LoginPage loginPage = new LoginPage(driver);
-		signupPage.signupUser("first1", "last1", "user", "password1");
+		signupPage.signupUser("first1", "last1", "user1", "password1");
 		assertEquals("You successfully signed up!", loginPage.getAlertText());
 
 		Thread.sleep(1000);
-		loginPage.loginUser("user", "password1");
+		loginPage.loginUser("user1", "password1");
 		Thread.sleep(1000);
 		assertEquals("Home", driver.getTitle());
 
@@ -137,6 +137,11 @@ class SuperDriveApplicationTests {
 		assertTrue(resultPage.getResultMessage().contains("Your note was updated"));
 		Thread.sleep(1000);
 		resultPage.moveOn();
+		
+		Thread.sleep(1000);
+		String currentDesc = homePage.getLastNoteDescription();
+		assertNotEquals(descBeforeUpdate, currentDesc);
+		assertEquals(descAfterUpdate, currentDesc);
 	}
 	
 	@Test

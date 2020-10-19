@@ -81,10 +81,6 @@ public class HomePage {
         wait = new WebDriverWait(driver, 5);
     }
     
-    public void selectFilesTab() {
-        this.filesTab.click();
-    }
-    
     public void selectNotesTab() {
         WebElement notesTabClickable = wait.until(ExpectedConditions.elementToBeClickable(notesTab));
         notesTabClickable.click();

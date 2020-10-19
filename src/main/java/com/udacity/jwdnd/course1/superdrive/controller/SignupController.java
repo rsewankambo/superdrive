@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Spring Boot @controller annotated class to handle user signup http requests.
+ */
 @Controller
 @RequestMapping("/signup")
 public class SignupController {
@@ -17,9 +20,19 @@ public class SignupController {
         this.userService = userService;
     }
     
+    /**
+     * Returns the signup page
+     * @return the signup page
+     */
     @GetMapping
     public String signUpView() { return "/signup"; }
     
+    /**
+     *
+     * @param user
+     * @param model
+     * @return
+     */
     @PostMapping
     public String userSignup(User user, Model model) {
         String signupError = null;

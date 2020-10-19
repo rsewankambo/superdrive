@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+/**
+ * This class handles login authentication. Annotated with @Service for
+ * auto-detection through classpath scannig.
+ */
 @Service
 public class AuthenticationService implements AuthenticationProvider {
     private HashService hashService;

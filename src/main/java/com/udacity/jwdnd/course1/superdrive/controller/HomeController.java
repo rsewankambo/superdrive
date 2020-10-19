@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Spring Boot @controller annotated class to handle home page http requests.
+ */
 @Controller
 @RequestMapping("/home")
 public class HomeController {

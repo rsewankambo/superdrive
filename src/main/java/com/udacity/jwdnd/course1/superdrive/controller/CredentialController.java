@@ -9,6 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+/**
+ * Spring Boot @controller annotated class to handle credential http requests.
+ */
 @Controller
 public class CredentialController {
     private CredentialService credentialService;

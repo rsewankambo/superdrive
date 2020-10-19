@@ -11,6 +11,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+/**
+ * This class handles password encryption and decryption. Annotated with @Service for
+ * auto-detection through classpath scannig.
+ */
 @Service
 public class EncryptionService {
     private Logger logger = LoggerFactory.getLogger(EncryptionService.class);

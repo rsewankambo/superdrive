@@ -12,11 +12,4 @@ public interface UserMapper {
             "VALUES(#{username}, #{salt}, #{password}, #{firstName}, #{lastName})")
     @Options(useGeneratedKeys = true, keyProperty = "userId")
     int addUser(User user);
-    
-    @Update("UPDATE users SET username = #{username}, salt = #{salt}, " +
-            "password = #{password}, firstname = #{firstName}, lastname = #{lastName}")
-    int updateUser(User user);
-    
-    @Delete("DELETE FROM users WHERE username = #{username}")
-    int deleteUser(String username);
 }
