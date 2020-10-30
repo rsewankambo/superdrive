@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.superdrive;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,15 +22,18 @@ public class SignupPage {
     @FindBy(css = "button[type=submit]")
     private WebElement submitButton;
     
+    private JavascriptExecutor js;
+    
     public SignupPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
+        js = (JavascriptExecutor) driver;
     }
     
-    public void signupUser(String firstName, String lastName, String username, String password) {
-        this.inputFirstName.sendKeys(firstName);
-        this.inputLastName.sendKeys(lastName);
-        this.inputUsername.sendKeys(username);
-        this.inputPassword.sendKeys(password);
-        this.submitButton.click();
+    public void signupUser(WebDriver driver, String firstName, String lastName, String username, String password) {
+        js.executeScript("arguments[0].value='" + firstName + "';", this.inputFirstName);
+        js.executeScript("arguments[0].value='" + lastName + "';", this.inputLastName);
+        js.executeScript("arguments[0].value='" + username + "';", this.inputUsername);
+        js.executeScript("arguments[0].value='" + password + "';", this.inputPassword);
+        js.executeScript("arguments[0].click();", this.submitButton);
     }
 }

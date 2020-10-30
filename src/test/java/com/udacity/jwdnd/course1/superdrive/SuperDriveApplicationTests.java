@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SuperDriveApplicationTests {
-
+	
 	@LocalServerPort
 	private int port;
 
@@ -56,17 +56,14 @@ class SuperDriveApplicationTests {
 		driver.get(baseURL + "/signup");
 		SignupPage signupPage = new SignupPage(driver);
 		LoginPage loginPage = new LoginPage(driver);
-		signupPage.signupUser("first1", "last1", "user1", "password1");
+		signupPage.signupUser(driver, "first1", "last1", "user32", "password1");
 		assertEquals("You successfully signed up!", loginPage.getAlertText());
 
-		Thread.sleep(1000);
-		loginPage.loginUser("user1", "password1");
-		Thread.sleep(1000);
+		loginPage.loginUser("user32", "password1");
 		assertEquals("Home", driver.getTitle());
 
 		HomePage homePage = new HomePage(driver);
 		homePage.logout();
-		Thread.sleep(1000);
 		assertEquals("You have been logged out", loginPage.getAlertText());
 
 		driver.get(baseURL + "/home");
@@ -78,7 +75,6 @@ class SuperDriveApplicationTests {
 		signupHelper();
 		loginHelper();
 		
-		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		homePage.selectNotesTab();
 		homePage.newNoteButtonClick();
@@ -86,7 +82,6 @@ class SuperDriveApplicationTests {
 		
 		ResultPage resultPage = new ResultPage(driver);
 		assertTrue(resultPage.getResultMessage().contains("Your note was successfully saved"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -101,17 +96,14 @@ class SuperDriveApplicationTests {
 		signupHelper();
 		loginHelper();
 		
-		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		ResultPage resultPage = new ResultPage(driver);
 		
 		populateNotes(homePage, resultPage, "test title 1", "test description 1");
-		Thread.sleep(1000);
 		populateNotes(homePage, resultPage, "test title 2", "test description 2");
 		
 		homePage.logout();
 		loginHelper();
-		Thread.sleep(1000);
 		
 		// note title edit test
 		String titleBeforeUpdate = homePage.getLastNoteTitle();
@@ -120,7 +112,6 @@ class SuperDriveApplicationTests {
 		homePage.addNote(titleAfterUpdate, null);
 		
 		assertTrue(resultPage.getResultMessage().contains("Your note was updated"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -135,7 +126,6 @@ class SuperDriveApplicationTests {
 		homePage.addNote( null, descAfterUpdate);
 		
 		assertTrue(resultPage.getResultMessage().contains("Your note was updated"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -149,23 +139,19 @@ class SuperDriveApplicationTests {
 		signupHelper();
 		loginHelper();
 		
-		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		ResultPage resultPage = new ResultPage(driver);
 		
 		populateNotes(homePage, resultPage, "test title 3", "test description 3");
-		Thread.sleep(1000);
 		populateNotes(homePage, resultPage, "test title 4", "test description 4");
 		
 		homePage.logout();
 		loginHelper();
-		Thread.sleep(1000);
 		
 		String lastNoteTitleBefore = homePage.getLastNoteTitle();
 		String lastNoteDescBefore = homePage.getLastNoteDescription();
 		homePage.lastNoteDeleteButtonClick();
 		assertTrue(resultPage.getResultMessage().contains("Your note was successfully deleted"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -180,7 +166,6 @@ class SuperDriveApplicationTests {
 		signupHelper();
 		loginHelper();
 		
-		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		homePage.selectCredentialsTab();
 		homePage.newCredentialButtonClick();
@@ -188,7 +173,6 @@ class SuperDriveApplicationTests {
 		
 		ResultPage resultPage = new ResultPage(driver);
 		assertTrue(resultPage.getResultMessage().contains("Your credential was successfully saved"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -205,17 +189,14 @@ class SuperDriveApplicationTests {
 		signupHelper();
 		loginHelper();
 		
-		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		ResultPage resultPage = new ResultPage(driver);
 		
 		populateCredentials(homePage, resultPage, "www.testUrl1.com", "testUsername1", "testPassword1");
-		Thread.sleep(1000);
 		populateCredentials(homePage, resultPage, "www.testUrl2.com", "testUsername2", "testPassword2");
 		
 		homePage.logout();
 		loginHelper();
-		Thread.sleep(1000);
 		
 		// credential URL edit test
 		String urlBeforeUpdate = homePage.getLastCredentialUrl();
@@ -224,7 +205,6 @@ class SuperDriveApplicationTests {
 		homePage.addCredential(urlAfterUpdate, null, null);
 		
 		assertTrue(resultPage.getResultMessage().contains("Your credential was updated"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -239,7 +219,6 @@ class SuperDriveApplicationTests {
 		homePage.addCredential(null, usernameAfterUpdate, null);
 		
 		assertTrue(resultPage.getResultMessage().contains("Your credential was updated"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -254,7 +233,6 @@ class SuperDriveApplicationTests {
 		homePage.addCredential(null, null, passwordAfterUpdate);
 		
 		assertTrue(resultPage.getResultMessage().contains("Your credential was updated"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -267,24 +245,20 @@ class SuperDriveApplicationTests {
 		signupHelper();
 		loginHelper();
 		
-		Thread.sleep(1000);
 		HomePage homePage = new HomePage(driver);
 		ResultPage resultPage = new ResultPage(driver);
 		
 		populateCredentials(homePage, resultPage, "test url 3", "test username 3", "test password 3");
-		Thread.sleep(1000);
 		populateCredentials(homePage, resultPage, "test url 4", "test username 4", "test password 3");
 		
 		homePage.logout();
 		loginHelper();
-		Thread.sleep(1000);
 		
 		String lastCredUrlBefore = homePage.getLastCredentialUrl();
 		String lastCredUsernameBefore = homePage.getLastCredentialUsername();
 		String lastCredPasswordBefore = homePage.getLastCredentialUsername();
 		homePage.lastCredentialDeleteButtonClick();
 		assertTrue(resultPage.getResultMessage().contains("Your credential was successfully deleted"));
-		Thread.sleep(1000);
 		resultPage.moveOn();
 		
 		Thread.sleep(1000);
@@ -299,7 +273,7 @@ class SuperDriveApplicationTests {
 	private void signupHelper() {
 		driver.get(baseURL + "/signup");
 		SignupPage signupPage = new SignupPage(driver);
-		signupPage.signupUser("first2", "last2", "user2", "password2");
+		signupPage.signupUser(driver,"first2", "last2", "user2", "password2");
 	}
 	
 	private void loginHelper() {

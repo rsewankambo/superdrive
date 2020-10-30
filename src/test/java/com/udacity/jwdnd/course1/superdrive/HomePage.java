@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.superdrive;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -74,20 +75,21 @@ public class HomePage {
     @FindBy(id = "saveCredentialButton")
     private WebElement saveCredentialButton;
     
-    WebDriverWait wait;
+    private WebDriverWait wait;
+    private JavascriptExecutor js;
     
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         wait = new WebDriverWait(driver, 5);
+        js = (JavascriptExecutor) driver;
     }
     
     public void selectNotesTab() {
-        WebElement notesTabClickable = wait.until(ExpectedConditions.elementToBeClickable(notesTab));
-        notesTabClickable.click();
+        js.executeScript("arguments[0].click();", notesTab);
     }
     
     public void selectCredentialsTab() {
-        this.credentialsTab.click();
+        js.executeScript("arguments[0].click();", credentialsTab);
     }
     
     public void newNoteButtonClick() {
